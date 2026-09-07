@@ -33,6 +33,7 @@ import {
   AlertDialogTitle,
 } from "./ui/alert-dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { BRAND } from "@/lib/brand";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
   const router = useRouter();
@@ -41,20 +42,18 @@ export function AppSidebar({ user }: { user: User | undefined }) {
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
 
   const handleDeleteAll = () => {
-    const deletePromise = fetch("/api/history", {
-      method: "DELETE",
-    });
+    const deletePromise = fetch("/api/history", { method: "DELETE" });
 
     toast.promise(deletePromise, {
-      loading: "Deleting all chats...",
+      loading: "Usuwanie wszystkich rozmów…",
       success: () => {
         mutate(unstable_serialize(getChatHistoryPaginationKey));
         setShowDeleteAllDialog(false);
         router.replace("/");
         router.refresh();
-        return "All chats deleted successfully";
+        return "Wszystkie rozmowy zostały usunięte";
       },
-      error: "Failed to delete all chats",
+      error: "Nie udało się usunąć rozmów",
     });
   };
 
@@ -67,12 +66,10 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               <Link
                 className="flex flex-row items-center gap-3"
                 href="/"
-                onClick={() => {
-                  setOpenMobile(false);
-                }}
+                onClick={() => setOpenMobile(false)}
               >
                 <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
-                  OpenChat
+                  {BRAND.name}
                 </span>
               </Link>
               <div className="flex flex-row gap-1">
@@ -89,7 +86,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent align="end" className="hidden md:block">
-                      Delete All Chats
+                      Usuń wszystkie rozmowy
                     </TooltipContent>
                   </Tooltip>
                 )}
@@ -109,7 +106,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent align="end" className="hidden md:block">
-                    New Chat
+                    Nowa rozmowa
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -128,16 +125,16 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete all chats?</AlertDialogTitle>
+            <AlertDialogTitle>Usunąć wszystkie rozmowy?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete all
-              your chats and remove them from our servers.
+              Tej operacji nie można cofnąć. Wszystkie rozmowy zostaną trwale
+              usunięte z Twojego konta i serwera.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Anuluj</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteAll}>
-              Delete All
+              Usuń wszystko
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
