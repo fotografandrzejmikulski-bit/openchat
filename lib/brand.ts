@@ -1,8 +1,16 @@
 export const BRAND = {
-  name: "Rozmowa",
-  productName: "Rozmowa AI",
-  tagline: "Twoja przestrzeń do myślenia, tworzenia i pracy z AI.",
+  name: "AURELIS",
+  productName: "AURELIS AI",
+  tagline: "Intelligence, refined.",
   shortDescription:
-    "Prywatny, nowoczesny interfejs do rozmów z modelami AI, pracy z dokumentami i tworzenia treści.",
+    "AURELIS AI is a premium conversational intelligence workspace for thinking, creating, researching, and working with AI.",
   locale: "pl-PL",
+  palette: {
+    obsidian: "#0B0B0D",
+    gold: "#D4AF37",
+    snow: "#F8F7F4",
+    burgundy: "#5A0F24",
+    royalBlue: "#173B8F",
+    bottleGreen: "#123C2A",
+  },
 } as const;
