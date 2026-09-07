@@ -19,7 +19,6 @@ export type Surface =
   | "activate_gateway";
 
 export type ErrorCode = `${ErrorType}:${Surface}`;
-
 export type ErrorVisibility = "response" | "log" | "none";
 
 export const visibilityBySurface: Record<Surface, ErrorVisibility> = {
@@ -42,9 +41,7 @@ export class OpenChatError extends Error {
 
   constructor(errorCode: ErrorCode, cause?: string) {
     super();
-
     const [type, surface] = errorCode.split(":");
-
     this.type = type as ErrorType;
     this.cause = cause;
     this.surface = surface as Surface;
@@ -55,18 +52,12 @@ export class OpenChatError extends Error {
   toResponse() {
     const code: ErrorCode = `${this.type}:${this.surface}`;
     const visibility = visibilityBySurface[this.surface];
-
     const { message, cause, statusCode } = this;
 
     if (visibility === "log") {
-      console.error({
-        code,
-        message,
-        cause,
-      });
-
+      console.error({ code, message, cause });
       return Response.json(
-        { code: "", message: "Something went wrong. Please try again later." },
+        { code: "", message: "Wystąpił błąd. Spróbuj ponownie później." },
         { status: statusCode }
       );
     }
@@ -77,43 +68,38 @@ export class OpenChatError extends Error {
 
 export function getMessageByErrorCode(errorCode: ErrorCode): string {
   if (errorCode.includes("database")) {
-    return "An error occurred while executing a database query.";
+    return "Wystąpił błąd podczas wykonywania operacji na bazie danych.";
   }
 
   switch (errorCode) {
     case "bad_request:api":
-      return "The request couldn't be processed. Please check your input and try again.";
-
+      return "Nie udało się przetworzyć żądania. Sprawdź dane i spróbuj ponownie.";
     case "bad_request:activate_gateway":
-      return "AI Gateway requires a valid credit card on file to service requests. Please visit https://vercel.com/d?to=%2F%5Bteam%5D%2F%7E%2Fai%3Fmodal%3Dadd-credit-card to add a card and unlock your free credits.";
-
+      return "Brama AI wymaga prawidłowej metody płatności. Skonfiguruj ją u dostawcy usługi, aby kontynuować.";
     case "unauthorized:auth":
-      return "You need to sign in before continuing.";
+      return "Zaloguj się, aby kontynuować.";
     case "forbidden:auth":
-      return "Your account does not have access to this feature.";
-
+      return "Twoje konto nie ma dostępu do tej funkcji.";
     case "rate_limit:chat":
-      return "You have exceeded your maximum number of messages for the day. Please try again later.";
+      return "Osiągnięto dzienny limit wiadomości. Spróbuj ponownie później.";
     case "not_found:chat":
-      return "The requested chat was not found. Please check the chat ID and try again.";
+      return "Nie znaleziono wskazanej rozmowy.";
     case "forbidden:chat":
-      return "This chat belongs to another user. Please check the chat ID and try again.";
+      return "Ta rozmowa należy do innego użytkownika.";
     case "unauthorized:chat":
-      return "You need to sign in to view this chat. Please sign in and try again.";
+      return "Zaloguj się, aby wyświetlić tę rozmowę.";
     case "offline:chat":
-      return "We're having trouble sending your message. Please check your internet connection and try again.";
-
+      return "Nie udało się wysłać wiadomości. Sprawdź połączenie z internetem i spróbuj ponownie.";
     case "not_found:document":
-      return "The requested document was not found. Please check the document ID and try again.";
+      return "Nie znaleziono wskazanego dokumentu.";
     case "forbidden:document":
-      return "This document belongs to another user. Please check the document ID and try again.";
+      return "Ten dokument należy do innego użytkownika.";
     case "unauthorized:document":
-      return "You need to sign in to view this document. Please sign in and try again.";
+      return "Zaloguj się, aby wyświetlić ten dokument.";
     case "bad_request:document":
-      return "The request to create or update the document was invalid. Please check your input and try again.";
-
+      return "Nieprawidłowe dane podczas tworzenia lub aktualizacji dokumentu.";
     default:
-      return "Something went wrong. Please try again later.";
+      return "Wystąpił błąd. Spróbuj ponownie później.";
   }
 }
 
