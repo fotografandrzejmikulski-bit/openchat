@@ -8,7 +8,6 @@ import { BRAND } from "@/lib/brand";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chat.vercel.ai"),
   title: {
     default: BRAND.productName,
     template: `%s · ${BRAND.name}`,
@@ -16,7 +15,11 @@ export const metadata: Metadata = {
   description: BRAND.shortDescription,
   applicationName: BRAND.productName,
   generator: "Next.js",
-  keywords: ["AI", "AURELIS", "inteligencja", "asystent AI", "produktywność", "dokumenty"],
+  keywords: ["AI", "AURELIS", "inteligencja", "asystent AI", "produktywność", "badania", "dokumenty", "tworzenie"],
+  authors: [{ name: "Andrzej Mikulski" }],
+  creator: "Andrzej Mikulski",
+  publisher: "AURELIS AI",
+  robots: { index: true, follow: true },
 };
 
 export const viewport = {
