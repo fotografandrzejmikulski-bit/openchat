@@ -1,12 +1,5 @@
 import { geolocation } from "@vercel/functions";
-import {
-  convertToModelMessages,
-  createUIMessageStream,
-  createUIMessageStreamResponse,
-  generateId,
-  stepCountIs,
-  streamText,
-} from "ai";
+import { convertToModelMessages, createUIMessageStream, createUIMessageStreamResponse, generateId, stepCountIs, streamText } from "ai";
 import { after } from "next/server";
 import { createResumableStreamContext } from "resumable-stream";
 import { auth, type UserType } from "@/app/(auth)/auth";
@@ -18,17 +11,7 @@ import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
 import { updateDocument } from "@/lib/ai/tools/update-document";
 import { isProductionEnvironment } from "@/lib/constants";
-import {
-  createStreamId,
-  deleteChatById,
-  getChatById,
-  getMessageCountByUserId,
-  getMessagesByChatId,
-  saveChat,
-  saveMessages,
-  updateChatTitleById,
-  updateMessage,
-} from "@/lib/db/queries";
+import { createStreamId, deleteChatById, getChatById, getMessageCountByUserId, getMessagesByChatId, saveChat, saveMessages, updateChatTitleById, updateMessage } from "@/lib/db/queries";
 import type { DBMessage } from "@/lib/db/schema";
 import { OpenChatError } from "@/lib/errors";
 import type { ChatMessage } from "@/lib/types";
@@ -59,9 +42,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const { id, message, messages, selectedChatModel, selectedVisibilityType } =
-      requestBody;
-
+    const { id, message, messages, selectedChatModel, selectedVisibilityType } = requestBody;
     const session = await auth();
 
     if (!session?.user) {
@@ -69,18 +50,13 @@ export async function POST(request: Request) {
     }
 
     const userType: UserType = session.user.type;
-
-    const messageCount = await getMessageCountByUserId({
-      id: session.user.id,
-      differenceInHours: 24,
-    });
+    const messageCount = await getMessageCountByUserId({ id: session.user.id, differenceInHours: 24 });
 
     if (messageCount > entitlementsByUserType[userType].maxMessagesPerDay) {
       return new OpenChatError("rate_limit:chat").toResponse();
     }
 
     const isToolApprovalFlow = Boolean(messages);
-
     const chat = await getChatById({ id });
     let messagesFromDb: DBMessage[] = [];
     let titlePromise: Promise<string> | null = null;
@@ -96,7 +72,7 @@ export async function POST(request: Request) {
       await saveChat({
         id,
         userId: session.user.id,
-        title: "New chat",
+        title: "Nowa rozmowa",
         visibility: selectedVisibilityType,
       });
       titlePromise = generateTitleFromUserMessage({ message });
@@ -107,33 +83,15 @@ export async function POST(request: Request) {
       : [...convertToUIMessages(messagesFromDb), message as ChatMessage];
 
     const { longitude, latitude, city, country } = geolocation(request);
-
-    const requestHints: RequestHints = {
-      longitude,
-      latitude,
-      city,
-      country,
-    };
+    const requestHints: RequestHints = { longitude, latitude, city, country };
 
     if (message?.role === "user") {
       await saveMessages({
-        messages: [
-          {
-            chatId: id,
-            id: message.id,
-            role: "user",
-            parts: message.parts,
-            attachments: [],
-            createdAt: new Date(),
-          },
-        ],
+        messages: [{ chatId: id, id: message.id, role: "user", parts: message.parts, attachments: [], createdAt: new Date() }],
       });
     }
 
-    const isReasoningModel =
-      selectedChatModel.includes("reasoning") ||
-      selectedChatModel.includes("thinking");
-
+    const isReasoningModel = selectedChatModel.includes("reasoning") || selectedChatModel.includes("thinking");
     const modelMessages = await convertToModelMessages(uiMessages);
 
     const stream = createUIMessageStream({
@@ -144,31 +102,15 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: modelMessages,
           stopWhen: stepCountIs(5),
-          experimental_activeTools: isReasoningModel
-            ? []
-            : [
-                "getWeather",
-                "createDocument",
-                "updateDocument",
-                "requestSuggestions",
-              ],
-          providerOptions: isReasoningModel
-            ? {
-                anthropic: {
-                  thinking: { type: "enabled", budgetTokens: 10_000 },
-                },
-              }
-            : undefined,
+          experimental_activeTools: isReasoningModel ? [] : ["getWeather", "createDocument", "updateDocument", "requestSuggestions"],
+          providerOptions: isReasoningModel ? { anthropic: { thinking: { type: "enabled", budgetTokens: 10_000 } } } : undefined,
           tools: {
             getWeather,
             createDocument: createDocument({ session, dataStream }),
             updateDocument: updateDocument({ session, dataStream }),
             requestSuggestions: requestSuggestions({ session, dataStream }),
           },
-          experimental_telemetry: {
-            isEnabled: isProductionEnvironment,
-            functionId: "stream-text",
-          },
+          experimental_telemetry: { isEnabled: isProductionEnvironment, functionId: "stream-text" },
         });
 
         dataStream.merge(result.toUIMessageStream({ sendReasoning: true }));
@@ -185,59 +127,31 @@ export async function POST(request: Request) {
           for (const finishedMsg of finishedMessages) {
             const existingMsg = uiMessages.find((m) => m.id === finishedMsg.id);
             if (existingMsg) {
-              await updateMessage({
-                id: finishedMsg.id,
-                parts: finishedMsg.parts,
-              });
+              await updateMessage({ id: finishedMsg.id, parts: finishedMsg.parts });
             } else {
-              await saveMessages({
-                messages: [
-                  {
-                    id: finishedMsg.id,
-                    role: finishedMsg.role,
-                    parts: finishedMsg.parts,
-                    createdAt: new Date(),
-                    attachments: [],
-                    chatId: id,
-                  },
-                ],
-              });
+              await saveMessages({ messages: [{ id: finishedMsg.id, role: finishedMsg.role, parts: finishedMsg.parts, createdAt: new Date(), attachments: [], chatId: id }] });
             }
           }
         } else if (finishedMessages.length > 0) {
-          await saveMessages({
-            messages: finishedMessages.map((currentMessage) => ({
-              id: currentMessage.id,
-              role: currentMessage.role,
-              parts: currentMessage.parts,
-              createdAt: new Date(),
-              attachments: [],
-              chatId: id,
-            })),
-          });
+          await saveMessages({ messages: finishedMessages.map((currentMessage) => ({ id: currentMessage.id, role: currentMessage.role, parts: currentMessage.parts, createdAt: new Date(), attachments: [], chatId: id })) });
         }
       },
-      onError: () => "Oops, an error occurred!",
+      onError: () => "Wystąpił nieoczekiwany błąd podczas generowania odpowiedzi.",
     });
 
     return createUIMessageStreamResponse({
       stream,
       async consumeSseStream({ stream: sseStream }) {
-        if (!process.env.REDIS_URL) {
-          return;
-        }
+        if (!process.env.REDIS_URL) return;
         try {
           const streamContext = getStreamContext();
           if (streamContext) {
             const streamId = generateId();
             await createStreamId({ streamId, chatId: id });
-            await streamContext.createNewResumableStream(
-              streamId,
-              () => sseStream
-            );
+            await streamContext.createNewResumableStream(streamId, () => sseStream);
           }
         } catch (_) {
-          // ignore redis errors
+          // Redis is optional; the response stream remains usable without it.
         }
       },
     });
@@ -248,16 +162,11 @@ export async function POST(request: Request) {
       return error.toResponse();
     }
 
-    if (
-      error instanceof Error &&
-      error.message?.includes(
-        "AI Gateway requires a valid credit card on file to service requests"
-      )
-    ) {
+    if (error instanceof Error && error.message?.includes("AI Gateway requires a valid credit card on file to service requests")) {
       return new OpenChatError("bad_request:activate_gateway").toResponse();
     }
 
-    console.error("Unhandled error in chat API:", error, { vercelId });
+    console.error("Unhandled error in AURELIS chat API:", error, { vercelId });
     return new OpenChatError("offline:chat").toResponse();
   }
 }
@@ -266,23 +175,14 @@ export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
-  if (!id) {
-    return new OpenChatError("bad_request:api").toResponse();
-  }
+  if (!id) return new OpenChatError("bad_request:api").toResponse();
 
   const session = await auth();
-
-  if (!session?.user) {
-    return new OpenChatError("unauthorized:chat").toResponse();
-  }
+  if (!session?.user) return new OpenChatError("unauthorized:chat").toResponse();
 
   const chat = await getChatById({ id });
-
-  if (chat?.userId !== session.user.id) {
-    return new OpenChatError("forbidden:chat").toResponse();
-  }
+  if (chat?.userId !== session.user.id) return new OpenChatError("forbidden:chat").toResponse();
 
   const deletedChat = await deleteChatById({ id });
-
   return Response.json(deletedChat, { status: 200 });
 }
