@@ -2,6 +2,8 @@ export const BRAND = {
   name: "AURELIS",
   productName: "AURELIS AI",
   tagline: "Intelligence, refined.",
+  supportingLine: "Inteligencja. Precyzja. Forma.",
+  signature: "Andrzej Mikulski",
   shortDescription:
     "AURELIS AI is a premium conversational intelligence workspace for thinking, creating, researching, and working with AI.",
   locale: "pl-PL",
