@@ -40,6 +40,12 @@
   --sidebar-ring: #D4AF37;
   --radius: 0.65rem;
   --sidebar: #F2EFE8;
+  --aurelis-obsidian: #0B0B0D;
+  --aurelis-gold: #D4AF37;
+  --aurelis-snow: #F8F7F4;
+  --aurelis-burgundy: #5A0F24;
+  --aurelis-royal-blue: #173B8F;
+  --aurelis-bottle-green: #123C2A;
 }
 
 .dark {
@@ -81,7 +87,7 @@
 @theme {
   --font-sans: var(--font-geist);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-display);
+  --font-display-family: var(--font-display);
   --breakpoint-toast-mobile: 600px;
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -126,13 +132,17 @@
   body { @apply bg-background text-foreground; overflow-x: hidden; position: relative; }
   html { overflow-x: hidden; }
   ::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); color: var(--foreground); }
+  button, [role="button"], a { -webkit-tap-highlight-color: transparent; }
 }
 
 .aurelis-display { font-family: var(--font-display), Georgia, serif; letter-spacing: -0.025em; }
-.aurelis-gold { color: #D4AF37; }
-.aurelis-gold-line { background: linear-gradient(90deg, transparent, #D4AF37, transparent); height: 1px; }
+.aurelis-gold { color: var(--aurelis-gold); }
+.aurelis-gold-line { background: linear-gradient(90deg, transparent, var(--aurelis-gold), transparent); height: 1px; }
 .aurelis-luxury-surface { box-shadow: 0 18px 60px rgb(11 11 13 / 0.08), inset 0 1px rgb(255 255 255 / 0.45); }
 .dark .aurelis-luxury-surface { box-shadow: 0 24px 80px rgb(0 0 0 / 0.42), inset 0 1px rgb(255 255 255 / 0.035); }
+
+.aurelis-focus:focus-visible { outline: 2px solid var(--aurelis-gold); outline-offset: 2px; }
+.aurelis-glow { box-shadow: 0 0 0 1px rgb(212 175 55 / 0.14), 0 14px 44px rgb(212 175 55 / 0.08); }
 
 .skeleton * { pointer-events: none !important; }
 .skeleton *[class^="text-"] { color: transparent; @apply rounded-md bg-foreground/20 select-none animate-pulse; }
