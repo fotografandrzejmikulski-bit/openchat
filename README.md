@@ -1,44 +1,54 @@
-# Rozmowa AI
+# AURELIS AI
 
-> **Twoja przestrzeń do myślenia, tworzenia i pracy z AI.**
+> **Intelligence, refined.**
 
-Rozmowa AI to nowoczesna, polskojęzyczna aplikacja konwersacyjna zbudowana na Next.js, React i AI SDK. Łączy rozmowę z modelami AI, trwałą historię, autoryzację użytkowników, pracę z plikami oraz tryb dokumentów i artefaktów w jednym interfejsie.
+AURELIS AI is a premium conversational intelligence workspace for thinking, creating, researching and working with AI.
 
-Projekt zachowuje techniczne fundamenty oryginalnego OpenChat, ale otrzymuje własną warstwę produktu: język, nazewnictwo, metadane, komunikaty błędów, doświadczenie logowania i subtelny system identyfikacji marki.
+The product combines streaming AI conversations, persistent history, authentication, file workflows, documents and interactive artifacts in one focused interface. Its visual language is deliberately restrained: obsidian, 24-karat gold, snow white, burgundy, royal blue and bottle green, supported by an editorial display typeface and a high-contrast functional UI.
 
-## Najważniejsze możliwości
+## Product identity
 
-- **Rozmowa z AI** — streaming odpowiedzi, wybór modeli i obsługa narzędzi.
-- **Artefakty i dokumenty** — tworzenie oraz edycja treści, kodu i arkuszy obok rozmowy.
-- **Historia rozmów** — trwałe zapisywanie i zarządzanie konwersacjami.
-- **Pliki** — przesyłanie materiałów do pracy z asystentem.
-- **Konta użytkowników** — logowanie, rejestracja i tryb gościa.
-- **Tryb jasny i ciemny** — spójne doświadczenie na desktopie i urządzeniach mobilnych.
-- **Bezpieczeństwo i obserwowalność** — walidacja żądań, kontrolowane błędy i instrumentacja.
+| Element | AURELIS standard |
+| --- | --- |
+| Brand | **AURELIS** |
+| Product | **AURELIS AI** |
+| Tagline | **Intelligence, refined.** |
+| Supporting line | **Inteligencja. Precyzja. Forma.** |
+| Primary language | Polish, with adaptive multilingual responses |
+| Visual system | Obsidian · 24K Gold · Snow White · Burgundy · Royal Blue · Bottle Green |
+| Display typography | Cormorant Garamond |
+| Interface typography | Geist |
 
-## Tożsamość produktu
+The supplied AM / Andrzej Mikulski crest has been translated into a reusable vector brand lockup used across the product shell, authentication experience and application icon.
 
-**Nazwa:** Rozmowa AI  
-**Krótka nazwa:** Rozmowa  
-**Hasło:** Twoja przestrzeń do myślenia, tworzenia i pracy z AI.
+## Core capabilities
 
-Branding został celowo zaprojektowany jako subtelna warstwa nad istniejącą architekturą. Techniczne identyfikatory, ścieżki API i nazwy wewnętrzne mogą pozostać niezmienione, aby ograniczyć ryzyko niepotrzebnych regresji.
+- **Conversational AI** — streaming responses, model selection and tool-enabled workflows.
+- **Artifacts and documents** — writing, editing, coding and spreadsheet-oriented work alongside the conversation.
+- **Persistent history** — authenticated conversation storage and management.
+- **Files** — upload and multimodal attachment workflows.
+- **Authentication** — registration, login and guest-capable application flows.
+- **Responsive UI** — desktop and mobile layouts with light and dark themes.
+- **Observability** — OpenTelemetry instrumentation and controlled application errors.
+- **Production foundations** — PostgreSQL, Drizzle ORM, Next.js App Router, AI SDK and Playwright coverage.
 
-## Architektura
+## Architecture
 
-Aplikacja wykorzystuje m.in.:
+The application is built around:
 
 - **Next.js 16 + App Router**
 - **React 19**
-- **AI SDK 6** i Vercel AI Gateway
-- **Tailwind CSS + Radix UI / shadcn-style components**
+- **AI SDK 6** and Vercel AI Gateway
+- **Tailwind CSS 4 + Radix UI / shadcn-style primitives**
 - **Drizzle ORM + PostgreSQL**
 - **Auth.js / NextAuth**
-- **Vercel Blob** dla magazynowania plików
-- **Playwright** dla testów end-to-end
-- **OpenTelemetry / Vercel OTEL** dla obserwowalności
+- **Vercel Blob** for file storage
+- **Playwright** for end-to-end tests
+- **OpenTelemetry / Vercel OTEL** for observability
 
-## Uruchomienie lokalne
+The repository retains compatible internal technical identifiers where changing them would create unnecessary migration risk. Public product-facing language is AURELIS.
+
+## Local development
 
 ```bash
 pnpm install
@@ -46,11 +56,11 @@ pnpm db:migrate
 pnpm dev
 ```
 
-Aplikacja będzie dostępna pod adresem `http://localhost:3000`.
+Open `http://localhost:3000`.
 
-Zmienne środowiskowe należy skonfigurować zgodnie z [`.env.example`](.env.example). Nigdy nie commituj sekretów do repozytorium.
+Configure environment variables from `.env.example`. Never commit credentials, provider keys, session secrets or database credentials.
 
-## Kontrola jakości
+## Quality gates
 
 ```bash
 pnpm lint
@@ -58,19 +68,35 @@ pnpm test
 pnpm build
 ```
 
-Przed wdrożeniem uruchom pełny zestaw testów, migracji i budowania produkcyjnego w środowisku zbliżonym do docelowego.
+A production deployment should pass linting, database migration checks, the end-to-end suite and a production build in an environment representative of the target runtime.
 
-## Bezpieczne wdrażanie
+## Security baseline
 
-- Sekrety przechowuj wyłącznie w zmiennych środowiskowych dostawcy hostingu.
-- Ogranicz dostęp do bazy danych i magazynu plików do wymaganych usług.
-- Nie publikuj danych sesji, tokenów ani kluczy dostawców modeli.
-- Włącz monitorowanie błędów i logów dla środowiska produkcyjnego.
+- Keep secrets exclusively in environment variables or the hosting provider's secret store.
+- Restrict database and object-storage access to the services that require it.
+- Treat uploaded files and model/tool inputs as untrusted data.
+- Preserve authentication and authorization checks on every data-changing route.
+- Avoid exposing session material, provider credentials, internal prompts or infrastructure details to clients.
+- Monitor application errors and latency in production.
+
+## Design principles
+
+### 01 — Restraint
+Gold is an accent, not a wallpaper. The interface should feel expensive through spacing, typography, hierarchy and material contrast rather than visual noise.
+
+### 02 — Signal over ceremony
+AURELIS should get out of the user's way. Clear tasks, direct responses, deliberate motion and minimal chrome take precedence over decorative interaction.
+
+### 03 — Human control
+The assistant can accelerate work, but the user remains the decision-maker. Actions, destructive operations and tool approvals should be explicit and legible.
+
+### 04 — Technical honesty
+The interface and assistant must never imply that an operation happened when it did not. Errors should be actionable; uncertainty should be visible when it affects a decision.
 
 ## Status
 
-Repozytorium jest rozwijane jako baza dla własnej, polskojęzycznej przestrzeni AI. Warstwa „Rozmowa” jest projektowana tak, aby można było dalej rozwijać funkcje bez kosztownego przepisywania fundamentów aplikacji.
+AURELIS AI is an actively evolving product foundation. The current repository focuses on turning a capable AI-chat architecture into a coherent, premium and Polish-first product experience without sacrificing its underlying technical capabilities.
 
-## Licencja
+## License
 
-Informacje o licencji znajdują się w pliku [`LICENSE`](LICENSE).
+See [`LICENSE`](LICENSE).
