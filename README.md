@@ -1,71 +1,76 @@
-<a href="https://chat.vercel.ai/">
-  <img alt="Next.js 14 and App Router-ready OpenChat." src="app/(chat)/opengraph-image.png">
-  <h1 align="center">OpenChat</h1>
-</a>
+# Rozmowa AI
 
-<p align="center">
-    OpenChat (formerly AI Chatbot) is a free, open-source template built with Next.js and the AI SDK that helps you quickly build powerful chatbot applications.
-</p>
+> **Twoja przestrzeń do myślenia, tworzenia i pracy z AI.**
 
-<p align="center">
-  <a href="https://openchat.dev"><strong>Read Docs</strong></a> ·
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a>
-</p>
-<br/>
+Rozmowa AI to nowoczesna, polskojęzyczna aplikacja konwersacyjna zbudowana na Next.js, React i AI SDK. Łączy rozmowę z modelami AI, trwałą historię, autoryzację użytkowników, pracę z plikami oraz tryb dokumentów i artefaktów w jednym interfejsie.
 
-## Features
+Projekt zachowuje techniczne fundamenty oryginalnego OpenChat, ale otrzymuje własną warstwę produktu: język, nazewnictwo, metadane, komunikaty błędów, doświadczenie logowania i subtelny system identyfikacji marki.
 
-- [Next.js](https://nextjs.org) App Router
-  - Advanced routing for seamless navigation and performance
-  - React Server Components (RSCs) and Server Actions for server-side rendering and increased performance
-- [AI SDK](https://ai-sdk.dev/docs/introduction)
-  - Unified API for generating text, structured objects, and tool calls with LLMs
-  - Hooks for building dynamic chat and generative user interfaces
-  - Supports xAI (default), OpenAI, Fireworks, and other model providers
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - Component primitives from [Radix UI](https://radix-ui.com) for accessibility and flexibility
-- Data Persistence
-  - [Neon Serverless Postgres](https://vercel.com/marketplace/neon) for saving chat history and user data
-  - [Vercel Blob](https://vercel.com/storage/blob) for efficient file storage
-- [Auth.js](https://authjs.dev)
-  - Simple and secure authentication
+## Najważniejsze możliwości
 
-## Model Providers
+- **Rozmowa z AI** — streaming odpowiedzi, wybór modeli i obsługa narzędzi.
+- **Artefakty i dokumenty** — tworzenie oraz edycja treści, kodu i arkuszy obok rozmowy.
+- **Historia rozmów** — trwałe zapisywanie i zarządzanie konwersacjami.
+- **Pliki** — przesyłanie materiałów do pracy z asystentem.
+- **Konta użytkowników** — logowanie, rejestracja i tryb gościa.
+- **Tryb jasny i ciemny** — spójne doświadczenie na desktopie i urządzeniach mobilnych.
+- **Bezpieczeństwo i obserwowalność** — walidacja żądań, kontrolowane błędy i instrumentacja.
 
-This template uses the [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) to access multiple AI models through a unified interface. The default configuration includes [xAI](https://x.ai) models (`grok-2-vision-1212`, `grok-3-mini`) routed through the gateway.
+## Tożsamość produktu
 
-### AI Gateway Authentication
+**Nazwa:** Rozmowa AI  
+**Krótka nazwa:** Rozmowa  
+**Hasło:** Twoja przestrzeń do myślenia, tworzenia i pracy z AI.
 
-**For Vercel deployments**: Authentication is handled automatically via OIDC tokens.
+Branding został celowo zaprojektowany jako subtelna warstwa nad istniejącą architekturą. Techniczne identyfikatory, ścieżki API i nazwy wewnętrzne mogą pozostać niezmienione, aby ograniczyć ryzyko niepotrzebnych regresji.
 
-**For non-Vercel deployments**: You need to provide an AI Gateway API key by setting the `AI_GATEWAY_API_KEY` environment variable in your `.env.local` file.
+## Architektura
 
-With the [AI SDK](https://ai-sdk.dev/docs/introduction), you can also switch to direct LLM providers like [OpenAI](https://openai.com), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [many more](https://ai-sdk.dev/providers/ai-sdk-providers) with just a few lines of code.
+Aplikacja wykorzystuje m.in.:
 
-## Deploy Your Own
+- **Next.js 16 + App Router**
+- **React 19**
+- **AI SDK 6** i Vercel AI Gateway
+- **Tailwind CSS + Radix UI / shadcn-style components**
+- **Drizzle ORM + PostgreSQL**
+- **Auth.js / NextAuth**
+- **Vercel Blob** dla magazynowania plików
+- **Playwright** dla testów end-to-end
+- **OpenTelemetry / Vercel OTEL** dla obserwowalności
 
-You can deploy your own version of OpenChat to Vercel with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/templates/next.js/openchat)
-
-## Running locally
-
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run OpenChat. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
-
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various AI and authentication provider accounts.
-
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+## Uruchomienie lokalne
 
 ```bash
 pnpm install
-pnpm db:migrate # Setup database or apply latest database changes
+pnpm db:migrate
 pnpm dev
 ```
 
-Your app template should now be running on [localhost:3000](http://localhost:3000).
+Aplikacja będzie dostępna pod adresem `http://localhost:3000`.
+
+Zmienne środowiskowe należy skonfigurować zgodnie z [`.env.example`](.env.example). Nigdy nie commituj sekretów do repozytorium.
+
+## Kontrola jakości
+
+```bash
+pnpm lint
+pnpm test
+pnpm build
+```
+
+Przed wdrożeniem uruchom pełny zestaw testów, migracji i budowania produkcyjnego w środowisku zbliżonym do docelowego.
+
+## Bezpieczne wdrażanie
+
+- Sekrety przechowuj wyłącznie w zmiennych środowiskowych dostawcy hostingu.
+- Ogranicz dostęp do bazy danych i magazynu plików do wymaganych usług.
+- Nie publikuj danych sesji, tokenów ani kluczy dostawców modeli.
+- Włącz monitorowanie błędów i logów dla środowiska produkcyjnego.
+
+## Status
+
+Repozytorium jest rozwijane jako baza dla własnej, polskojęzycznej przestrzeni AI. Warstwa „Rozmowa” jest projektowana tak, aby można było dalej rozwijać funkcje bez kosztownego przepisywania fundamentów aplikacji.
+
+## Licencja
+
+Informacje o licencji znajdują się w pliku [`LICENSE`](LICENSE).
