@@ -32,8 +32,10 @@ export const Action = ({
   size = "sm",
   ...props
 }: ActionProps) => {
+  const accessibleName = props["aria-label"] ?? label ?? tooltip;
   const button = (
     <Button
+      aria-label={accessibleName}
       className={cn(
         "relative size-9 p-1.5 text-muted-foreground hover:text-foreground",
         className
@@ -44,7 +46,7 @@ export const Action = ({
       {...props}
     >
       {children}
-      <span className="sr-only">{label || tooltip}</span>
+      {accessibleName ? <span className="sr-only">{accessibleName}</span> : null}
     </Button>
   );
 
