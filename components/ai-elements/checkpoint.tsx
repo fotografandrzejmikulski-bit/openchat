@@ -56,7 +56,14 @@ export const CheckpointTrigger = ({
   tooltip ? (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button size={size} type="button" variant={variant} {...props}>
+        <Button
+          aria-label={props["aria-label"] ?? tooltip}
+          className={className}
+          size={size}
+          type="button"
+          variant={variant}
+          {...props}
+        >
           {children}
         </Button>
       </TooltipTrigger>
@@ -65,7 +72,14 @@ export const CheckpointTrigger = ({
       </TooltipContent>
     </Tooltip>
   ) : (
-    <Button size={size} type="button" variant={variant} {...props}>
+    <Button
+      aria-label={props["aria-label"] ?? (typeof children === "string" ? children : undefined)}
+      className={className}
+      size={size}
+      type="button"
+      variant={variant}
+      {...props}
+    >
       {children}
     </Button>
   );
