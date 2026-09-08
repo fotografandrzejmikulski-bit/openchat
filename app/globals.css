@@ -127,36 +127,147 @@
 }
 
 @layer base {
-  *, ::after, ::before, ::backdrop, ::file-selector-button { border-color: var(--border); }
-  * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground; overflow-x: hidden; position: relative; }
-  html { overflow-x: hidden; }
-  ::selection { background: color-mix(in srgb, var(--accent) 28%, transparent); color: var(--foreground); }
-  button, [role="button"], a { -webkit-tap-highlight-color: transparent; }
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    border-color: var(--border);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    overflow-x: hidden;
+    background: var(--background);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    position: relative;
+    font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+    color: var(--foreground);
+  }
+
+  button,
+  [role="button"],
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
-.aurelis-display { font-family: var(--font-display), Georgia, serif; letter-spacing: -0.025em; }
-.aurelis-gold { color: var(--aurelis-gold); }
-.aurelis-gold-line { background: linear-gradient(90deg, transparent, var(--aurelis-gold), transparent); height: 1px; }
-.aurelis-luxury-surface { box-shadow: 0 18px 60px rgb(11 11 13 / 0.08), inset 0 1px rgb(255 255 255 / 0.45); }
-.dark .aurelis-luxury-surface { box-shadow: 0 24px 80px rgb(0 0 0 / 0.42), inset 0 1px rgb(255 255 255 / 0.035); }
+.aurelis-display {
+  font-family: var(--font-display), Georgia, serif;
+  letter-spacing: -0.025em;
+}
 
-.aurelis-focus:focus-visible { outline: 2px solid var(--aurelis-gold); outline-offset: 2px; }
-.aurelis-glow { box-shadow: 0 0 0 1px rgb(212 175 55 / 0.14), 0 14px 44px rgb(212 175 55 / 0.08); }
+.aurelis-gold {
+  color: var(--aurelis-gold);
+}
 
-.skeleton * { pointer-events: none !important; }
-.skeleton *[class^="text-"] { color: transparent; @apply rounded-md bg-foreground/20 select-none animate-pulse; }
-.skeleton-bg { @apply bg-foreground/10; }
-.skeleton-div { @apply bg-foreground/20 animate-pulse; }
-.ProseMirror { outline: none; }
-.cm-editor, .cm-gutters { @apply bg-background! outline-hidden!; }
-.cm-activeLine, .cm-activeLineGutter { @apply bg-transparent!; }
-.cm-lineNumbers { @apply min-w-7; }
-.cm-foldGutter { @apply min-w-3; }
-.suggestion-highlight { @apply bg-blue-200 hover:bg-blue-300 dark:hover:bg-blue-400/50 dark:text-blue-50 dark:bg-blue-500/40; }
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--muted-foreground) 50%, transparent); }
-::-webkit-scrollbar-corner { background: transparent; }
-* { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+.aurelis-gold-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--aurelis-gold),
+    transparent
+  );
+}
+
+.aurelis-luxury-surface {
+  box-shadow:
+    0 18px 60px rgb(11 11 13 / 0.08),
+    inset 0 1px rgb(255 255 255 / 0.45);
+}
+
+.dark .aurelis-luxury-surface {
+  box-shadow:
+    0 24px 80px rgb(0 0 0 / 0.42),
+    inset 0 1px rgb(255 255 255 / 0.035);
+}
+
+.aurelis-focus:focus-visible {
+  outline: 2px solid var(--aurelis-gold);
+  outline-offset: 2px;
+}
+
+.aurelis-glow {
+  box-shadow:
+    0 0 0 1px rgb(212 175 55 / 0.14),
+    0 14px 44px rgb(212 175 55 / 0.08);
+}
+
+.skeleton * {
+  pointer-events: none !important;
+}
+
+.skeleton *[class^="text-"] {
+  color: transparent;
+  @apply rounded-md bg-foreground/20 select-none animate-pulse;
+}
+
+.skeleton-bg {
+  @apply bg-foreground/10;
+}
+
+.skeleton-div {
+  @apply bg-foreground/20 animate-pulse;
+}
+
+.ProseMirror {
+  outline: none;
+}
+
+.cm-editor,
+.cm-gutters {
+  @apply bg-background! outline-hidden!;
+}
+
+.cm-activeLine,
+.cm-activeLineGutter {
+  @apply bg-transparent!;
+}
+
+.cm-lineNumbers {
+  @apply min-w-7;
+}
+
+.cm-foldGutter {
+  @apply min-w-3;
+}
+
+.suggestion-highlight {
+  @apply bg-blue-100 hover:bg-blue-200 dark:hover:bg-blue-400/50 dark:text-blue-50 dark:bg-blue-500/30;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--muted-foreground) 50%, transparent);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
