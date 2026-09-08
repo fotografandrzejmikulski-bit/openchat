@@ -6,13 +6,23 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
-import { PlusIcon, TrashIcon } from "@/components/icons";
 import { AurelisBrand } from "@/components/aurelis-brand";
-import { getChatHistoryPaginationKey, SidebarHistory } from "@/components/sidebar-history";
+import { PlusIcon, TrashIcon } from "@/components/icons";
+import {
+  getChatHistoryPaginationKey,
+  SidebarHistory,
+} from "@/components/sidebar-history";
 import { SidebarUserNav } from "@/components/sidebar-user-nav";
-import { Button } from "@/components/ui/button";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, useSidebar } from "@/components/ui/sidebar";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function AppSidebar({ user }: { user: User | undefined }) {
@@ -36,6 +46,12 @@ export function AppSidebar({ user }: { user: User | undefined }) {
     });
   };
 
+  const goHome = () => {
+    setOpenMobile(false);
+    router.push("/");
+    router.refresh();
+  };
+
   return (
     <>
       <Sidebar className="group-data-[side=left]:border-r-0">
@@ -45,11 +61,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               <button
                 aria-label="Przejdź do strony głównej AURELIS"
                 className="rounded-xl outline-none transition-opacity hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[#D4AF37]"
-                onClick={() => {
-                  setOpenMobile(false);
-                  router.push("/");
-                  router.refresh();
-                }}
+                onClick={goHome}
                 type="button"
               >
                 <AurelisBrand />
@@ -58,38 +70,66 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                 {user && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button aria-label="Usuń wszystkie rozmowy" className="h-8 p-1 hover:text-[#D4AF37]" onClick={() => setShowDeleteAllDialog(true)} type="button" variant="ghost">
+                      <Button
+                        aria-label="Usuń wszystkie rozmowy"
+                        className="h-8 p-1 hover:text-[#D4AF37]"
+                        onClick={() => setShowDeleteAllDialog(true)}
+                        type="button"
+                        variant="ghost"
+                      >
                         <TrashIcon />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent align="end" className="hidden md:block">Usuń wszystkie rozmowy</TooltipContent>
+                    <TooltipContent align="end" className="hidden md:block">
+                      Usuń wszystkie rozmowy
+                    </TooltipContent>
                   </Tooltip>
                 )}
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button aria-label="Rozpocznij nową rozmowę" className="h-8 p-1 hover:text-[#D4AF37]" onClick={() => { setOpenMobile(false); router.push("/"); router.refresh(); }} type="button" variant="ghost">
+                    <Button
+                      aria-label="Rozpocznij nową rozmowę"
+                      className="h-8 p-1 hover:text-[#D4AF37]"
+                      onClick={goHome}
+                      type="button"
+                      variant="ghost"
+                    >
                       <PlusIcon />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent align="end" className="hidden md:block">Nowa rozmowa</TooltipContent>
+                  <TooltipContent align="end" className="hidden md:block">
+                    Nowa rozmowa
+                  </TooltipContent>
                 </Tooltip>
               </div>
             </div>
             <div className="mx-1 mt-3 aurelis-gold-line opacity-70" />
           </SidebarMenu>
         </SidebarHeader>
-        <SidebarContent><SidebarHistory user={user} /></SidebarContent>
-        <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
+        <SidebarContent>
+          <SidebarHistory user={user} />
+        </SidebarContent>
+        <SidebarFooter>
+          {user && <SidebarUserNav user={user} />}
+        </SidebarFooter>
       </Sidebar>
-      <AlertDialog onOpenChange={setShowDeleteAllDialog} open={showDeleteAllDialog}>
+      <AlertDialog
+        onOpenChange={setShowDeleteAllDialog}
+        open={showDeleteAllDialog}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Usunąć wszystkie rozmowy?</AlertDialogTitle>
-            <AlertDialogDescription>Tej operacji nie można cofnąć. Wszystkie rozmowy zostaną trwale usunięte z Twojego konta i serwera.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Tej operacji nie można cofnąć. Wszystkie rozmowy zostaną trwale
+              usunięte z Twojego konta i serwera.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Anuluj</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAll}>Usuń wszystko</AlertDialogAction>
+            <AlertDialogAction onClick={handleDeleteAll}>
+              Usuń wszystko
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
