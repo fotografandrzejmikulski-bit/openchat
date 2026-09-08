@@ -40,6 +40,7 @@ export const Suggestion = ({
 
   return (
     <Button
+      aria-label={typeof children === "string" ? children : suggestion}
       className={cn("cursor-pointer rounded-full px-4", className)}
       onClick={handleClick}
       size={size}
