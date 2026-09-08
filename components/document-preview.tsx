@@ -2,6 +2,7 @@
 
 import equal from "fast-deep-equal";
 import {
+  type KeyboardEvent,
   type MouseEvent,
   memo,
   useCallback,
@@ -127,7 +128,7 @@ const LoadingSkeleton = ({ artifactKind }: { artifactKind: ArtifactKind }) => (
         </div>
         <div className="h-4 w-24 animate-pulse rounded-lg bg-muted-foreground/20" />
       </div>
-      <div>
+      <div aria-hidden="true">
         <FullscreenIcon />
       </div>
     </div>
@@ -179,15 +180,27 @@ const PureHitboxLayer = ({
     [setArtifact, result]
   );
 
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLElement>) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleClick(event as unknown as MouseEvent<HTMLElement>);
+      }
+    },
+    [handleClick]
+  );
+
   return (
     <div
-      aria-hidden="true"
+      aria-label="Otwórz dokument"
       className="absolute top-0 left-0 z-10 size-full rounded-xl"
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
       ref={hitboxRef}
-      role="presentation"
+      role="button"
+      tabIndex={0}
     >
-      <div className="flex w-full items-center justify-end p-4">
+      <div className="flex w-full items-center justify-end p-4" aria-hidden="true">
         <div className="absolute top-[13px] right-[9px] rounded-md p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700">
           <FullscreenIcon />
         </div>
@@ -214,7 +227,7 @@ const PureDocumentHeader = ({
 }) => (
   <div className="flex flex-row items-start justify-between gap-2 rounded-t-2xl border border-b-0 p-4 sm:items-center dark:border-zinc-700 dark:bg-muted">
     <div className="flex flex-row items-start gap-3 sm:items-center">
-      <div className="text-muted-foreground">
+      <div className="text-muted-foreground" aria-hidden="true">
         {isStreaming ? (
           <div className="animate-spin">
             <LoaderIcon />
