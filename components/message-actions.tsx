@@ -36,15 +36,14 @@ export function PureMessageActions({
 
   const handleCopy = async () => {
     if (!textFromParts) {
-      toast.error("There's no text to copy!");
+      toast.error("Brak tekstu do skopiowania.");
       return;
     }
 
     await copyToClipboard(textFromParts);
-    toast.success("Copied to clipboard!");
+    toast.success("Skopiowano do schowka.");
   };
 
-  // User messages get edit (on hover) and copy actions
   if (message.role === "user") {
     return (
       <Actions className="-mr-0.5 justify-end">
@@ -54,12 +53,12 @@ export function PureMessageActions({
               className="absolute top-0 -left-10 opacity-0 transition-opacity focus-visible:opacity-100 group-hover/message:opacity-100"
               data-testid="message-edit-button"
               onClick={() => setMode("edit")}
-              tooltip="Edit"
+              tooltip="Edytuj"
             >
               <PencilEditIcon />
             </Action>
           )}
-          <Action onClick={handleCopy} tooltip="Copy">
+          <Action onClick={handleCopy} tooltip="Kopiuj">
             <CopyIcon />
           </Action>
         </div>
@@ -69,7 +68,7 @@ export function PureMessageActions({
 
   return (
     <Actions className="-ml-0.5">
-      <Action onClick={handleCopy} tooltip="Copy">
+      <Action onClick={handleCopy} tooltip="Kopiuj">
         <CopyIcon />
       </Action>
 
@@ -87,7 +86,7 @@ export function PureMessageActions({
           });
 
           toast.promise(upvote, {
-            loading: "Upvoting Response...",
+            loading: "Zapisywanie oceny…",
             success: () => {
               mutate<Vote[]>(
                 `/api/vote?chatId=${chatId}`,
@@ -112,12 +111,12 @@ export function PureMessageActions({
                 { revalidate: false }
               );
 
-              return "Upvoted Response!";
+              return "Ocena została zapisana.";
             },
-            error: "Failed to upvote response.",
+            error: "Nie udało się zapisać oceny.",
           });
         }}
-        tooltip="Upvote Response"
+        tooltip="Dobra odpowiedź"
       >
         <ThumbUpIcon />
       </Action>
@@ -136,7 +135,7 @@ export function PureMessageActions({
           });
 
           toast.promise(downvote, {
-            loading: "Downvoting Response...",
+            loading: "Zapisywanie oceny…",
             success: () => {
               mutate<Vote[]>(
                 `/api/vote?chatId=${chatId}`,
@@ -161,12 +160,12 @@ export function PureMessageActions({
                 { revalidate: false }
               );
 
-              return "Downvoted Response!";
+              return "Ocena została zapisana.";
             },
-            error: "Failed to downvote response.",
+            error: "Nie udało się zapisać oceny.",
           });
         }}
-        tooltip="Downvote Response"
+        tooltip="Słabsza odpowiedź"
       >
         <ThumbDownIcon />
       </Action>
