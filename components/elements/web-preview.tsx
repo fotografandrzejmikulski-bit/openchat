@@ -30,7 +30,7 @@ const WebPreviewContext = createContext<WebPreviewContextValue | null>(null);
 const useWebPreview = () => {
   const context = useContext(WebPreviewContext);
   if (!context) {
-    throw new Error("WebPreview components must be used within a WebPreview");
+    throw new Error("Komponenty podglądu WWW wymagają WebPreview.");
   }
   return context;
 };
@@ -107,6 +107,7 @@ export const WebPreviewNavigationButton = ({
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
+          aria-label={props["aria-label"] ?? tooltip ?? "Nawigacja podglądu"}
           className="size-8 p-0 hover:text-foreground"
           disabled={disabled}
           onClick={onClick}
@@ -144,10 +145,11 @@ export const WebPreviewUrl = ({
 
   return (
     <Input
+      aria-label="Adres URL podglądu"
       className="h-8 flex-1 text-sm"
       onChange={onChange}
       onKeyDown={handleKeyDown}
-      placeholder="Enter URL..."
+      placeholder="Wpisz adres URL…"
       value={value ?? url}
       {...props}
     />
@@ -172,7 +174,7 @@ export const WebPreviewBody = ({
         className={cn("size-full", className)}
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-presentation"
         src={(src ?? url) || undefined}
-        title="Preview"
+        title="Podgląd strony WWW"
         {...props}
       />
       {loading}
@@ -205,11 +207,13 @@ export const WebPreviewConsole = ({
     >
       <CollapsibleTrigger asChild>
         <Button
+          aria-label="Pokaż lub ukryj konsolę"
           className="flex w-full items-center justify-between p-4 text-left font-medium hover:bg-muted/50"
           variant="ghost"
         >
-          Console
+          Konsola
           <ChevronDownIcon
+            aria-hidden="true"
             className={cn(
               "h-4 w-4 transition-transform duration-200",
               consoleOpen && "rotate-180"
@@ -225,7 +229,7 @@ export const WebPreviewConsole = ({
       >
         <div className="max-h-48 space-y-1 overflow-y-auto">
           {logs.length === 0 ? (
-            <p className="text-muted-foreground">No console output</p>
+            <p className="text-muted-foreground">Brak danych z konsoli.</p>
           ) : (
             logs.map((log, index) => (
               <div
