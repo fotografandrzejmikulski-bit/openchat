@@ -14,7 +14,7 @@ type Metadata = any;
 
 export const sheetArtifact = new Artifact<"sheet", Metadata>({
   kind: "sheet",
-  description: "Useful for working with spreadsheets",
+  description: "Do pracy z arkuszami, danymi tabelarycznymi i analizą struktury danych.",
   initialize: () => null,
   onStreamPart: ({ setArtifact, streamPart }) => {
     if (streamPart.type === "data-sheetDelta") {
@@ -40,7 +40,7 @@ export const sheetArtifact = new Artifact<"sheet", Metadata>({
   actions: [
     {
       icon: <UndoIcon size={18} />,
-      description: "View Previous version",
+      description: "Poprzednia wersja",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("prev");
       },
@@ -54,7 +54,7 @@ export const sheetArtifact = new Artifact<"sheet", Metadata>({
     },
     {
       icon: <RedoIcon size={18} />,
-      description: "View Next version",
+      description: "Następna wersja",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("next");
       },
@@ -68,7 +68,7 @@ export const sheetArtifact = new Artifact<"sheet", Metadata>({
     },
     {
       icon: <CopyIcon />,
-      description: "Copy as .csv",
+      description: "Kopiuj jako CSV",
       onClick: ({ content }) => {
         const parsed = parse<string[]>(content, { skipEmptyLines: true });
 
@@ -79,25 +79,25 @@ export const sheetArtifact = new Artifact<"sheet", Metadata>({
         const cleanedCsv = unparse(nonEmptyRows);
 
         navigator.clipboard.writeText(cleanedCsv);
-        toast.success("Copied csv to clipboard!");
+        toast.success("Skopiowano CSV do schowka.");
       },
     },
   ],
   toolbar: [
     {
-      description: "Format and clean data",
+      description: "Uporządkuj dane",
       icon: <SparklesIcon />,
       onClick: ({ sendMessage }) => {
         sendMessage({
           role: "user",
           parts: [
-            { type: "text", text: "Can you please format and clean the data?" },
+            { type: "text", text: "Uporządkuj, oczyść i ujednolić dane w tym arkuszu. Zachowaj wartościowe informacje i popraw oczywiste niespójności." },
           ],
         });
       },
     },
     {
-      description: "Analyze and visualize data",
+      description: "Analizuj i wizualizuj",
       icon: <LineChartIcon />,
       onClick: ({ sendMessage }) => {
         sendMessage({
@@ -105,7 +105,7 @@ export const sheetArtifact = new Artifact<"sheet", Metadata>({
           parts: [
             {
               type: "text",
-              text: "Can you please analyze and visualize the data by creating a new code artifact in python?",
+              text: "Przeanalizuj dane i utwórz artefakt kodu Python z czytelną, użyteczną wizualizacją najważniejszych zależności.",
             },
           ],
         });
