@@ -33,8 +33,8 @@ export const chat = pgTable("Chat", {
 
 export type Chat = InferSelectModel<typeof chat>;
 
-// DEPRECATED: The following schema is deprecated and will be removed in the future.
-// Read the migration guide at https://openchat.dev/docs/migration-guides/message-parts
+// DEPRECATED: retained only for compatibility with legacy database migrations.
+// New data uses the Message_v2 schema below.
 export const messageDeprecated = pgTable("Message", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   chatId: uuid("chatId")
@@ -60,8 +60,8 @@ export const message = pgTable("Message_v2", {
 
 export type DBMessage = InferSelectModel<typeof message>;
 
-// DEPRECATED: The following schema is deprecated and will be removed in the future.
-// Read the migration guide at https://openchat.dev/docs/migration-guides/message-parts
+// DEPRECATED: retained only for compatibility with legacy database migrations.
+// New votes use Vote_v2 and reference Message_v2.
 export const voteDeprecated = pgTable(
   "Vote",
   {
