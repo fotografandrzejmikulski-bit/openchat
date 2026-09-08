@@ -135,7 +135,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     });
 
     toast.promise(deletePromise, {
-      loading: "Deleting chat...",
+      loading: "Usuwanie rozmowy…",
       success: () => {
         mutate((chatHistories) => {
           if (chatHistories) {
@@ -153,9 +153,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
           router.refresh();
         }
 
-        return "Chat deleted successfully";
+        return "Rozmowa została usunięta";
       },
-      error: "Failed to delete chat",
+      error: "Nie udało się usunąć rozmowy",
     });
   };
 
@@ -163,8 +163,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     return (
       <SidebarGroup>
         <SidebarGroupContent>
-          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 text-sm text-zinc-500">
-            Login to save and revisit previous chats!
+          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 py-3 text-center text-sm text-sidebar-foreground/55">
+            Zaloguj się, aby zachowywać i wracać do wcześniejszych rozmów.
           </div>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -175,7 +175,7 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     return (
       <SidebarGroup>
         <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
-          Today
+          Dzisiaj
         </div>
         <SidebarGroupContent>
           <div className="flex flex-col">
@@ -186,11 +186,9 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
               >
                 <div
                   className="h-4 max-w-(--skeleton-width) flex-1 rounded-md bg-sidebar-accent-foreground/10"
-                  style={
-                    {
-                      "--skeleton-width": `${item}%`,
-                    } as React.CSSProperties
-                  }
+                  style={{
+                    "--skeleton-width": `${item}%`,
+                  } as React.CSSProperties}
                 />
               </div>
             ))}
@@ -204,8 +202,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
     return (
       <SidebarGroup>
         <SidebarGroupContent>
-          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 text-sm text-zinc-500">
-            Your conversations will appear here once you start chatting!
+          <div className="flex w-full flex-row items-center justify-center gap-2 px-2 py-3 text-center text-sm text-sidebar-foreground/55">
+            Twoje rozmowy pojawią się tutaj, gdy rozpoczniesz pracę z AURELIS.
           </div>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -229,8 +227,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
                   <div className="flex flex-col gap-6">
                     {groupedChats.today.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
-                          Today
+                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs uppercase tracking-[0.14em]">
+                          Dzisiaj
                         </div>
                         {groupedChats.today.map((chat) => (
                           <ChatItem
@@ -249,8 +247,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.yesterday.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
-                          Yesterday
+                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs uppercase tracking-[0.14em]">
+                          Wczoraj
                         </div>
                         {groupedChats.yesterday.map((chat) => (
                           <ChatItem
@@ -269,8 +267,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.lastWeek.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
-                          Last 7 days
+                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs uppercase tracking-[0.14em]">
+                          Ostatnie 7 dni
                         </div>
                         {groupedChats.lastWeek.map((chat) => (
                           <ChatItem
@@ -289,8 +287,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.lastMonth.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
-                          Last 30 days
+                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs uppercase tracking-[0.14em]">
+                          Ostatnie 30 dni
                         </div>
                         {groupedChats.lastMonth.map((chat) => (
                           <ChatItem
@@ -309,8 +307,8 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
 
                     {groupedChats.older.length > 0 && (
                       <div>
-                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs">
-                          Older than last month
+                        <div className="px-2 py-1 text-sidebar-foreground/50 text-xs uppercase tracking-[0.14em]">
+                          Starsze
                         </div>
                         {groupedChats.older.map((chat) => (
                           <ChatItem
@@ -340,15 +338,15 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
           />
 
           {hasReachedEnd ? (
-            <div className="mt-8 flex w-full flex-row items-center justify-center gap-2 px-2 text-sm text-zinc-500">
-              You have reached the end of your chat history.
+            <div className="mt-8 flex w-full flex-row items-center justify-center gap-2 px-2 text-center text-sm text-sidebar-foreground/45">
+              To koniec historii rozmów.
             </div>
           ) : (
-            <div className="mt-8 flex flex-row items-center gap-2 p-2 text-zinc-500 dark:text-zinc-400">
+            <div className="mt-8 flex flex-row items-center gap-2 p-2 text-sidebar-foreground/45">
               <div className="animate-spin">
                 <LoaderIcon />
               </div>
-              <div>Loading Chats...</div>
+              <div>Ładowanie historii…</div>
             </div>
           )}
         </SidebarGroupContent>
@@ -357,16 +355,15 @@ export function SidebarHistory({ user }: { user: User | undefined }) {
       <AlertDialog onOpenChange={setShowDeleteDialog} open={showDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>Czy na pewno chcesz usunąć rozmowę?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              chat and remove it from our servers.
+              Tej operacji nie można cofnąć. Rozmowa zostanie trwale usunięta z Twojej historii.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Anuluj</AlertDialogCancel>
             <AlertDialogAction onClick={handleDelete}>
-              Continue
+              Usuń rozmowę
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
