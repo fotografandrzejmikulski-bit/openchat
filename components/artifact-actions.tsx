@@ -32,7 +32,7 @@ function PureArtifactActions({
   );
 
   if (!artifactDefinition) {
-    throw new Error("Artifact definition not found!");
+    throw new Error("Nie znaleziono definicji artefaktu.");
   }
 
   const actionContext: ArtifactActionContext = {
@@ -51,10 +51,13 @@ function PureArtifactActions({
         <Tooltip key={action.description}>
           <TooltipTrigger asChild>
             <Button
-              className={cn("h-fit dark:hover:bg-zinc-700", {
-                "p-2": !action.label,
-                "px-2 py-1.5": action.label,
-              })}
+              className={cn(
+                "h-fit transition-colors hover:border-[#D4AF37]/50 hover:text-[#D4AF37] dark:hover:bg-zinc-900",
+                {
+                  "p-2": !action.label,
+                  "px-2 py-1.5": action.label,
+                }
+              )}
               disabled={
                 isLoading || artifact.status === "streaming"
                   ? true
@@ -68,7 +71,7 @@ function PureArtifactActions({
                 try {
                   await Promise.resolve(action.onClick(actionContext));
                 } catch (_error) {
-                  toast.error("Failed to execute action");
+                  toast.error("Nie udało się wykonać tej operacji.");
                 } finally {
                   setIsLoading(false);
                 }
