@@ -22,11 +22,8 @@ const OUTPUT_HANDLERS = {
     import base64
     from matplotlib import pyplot as plt
 
-    # Clear any existing plots
     plt.clf()
     plt.close('all')
-
-    # Switch to agg backend
     plt.switch_backend('agg')
 
     def setup_matplotlib_output():
@@ -41,7 +38,6 @@ const OUTPUT_HANDLERS = {
             png_base64 = base64.b64encode(png_buf.read()).decode('utf-8')
             print(f'data:image/png;base64,{png_base64}')
             png_buf.close()
-
             plt.clf()
             plt.close('all')
 
@@ -69,7 +65,7 @@ type Metadata = {
 export const codeArtifact = new Artifact<"code", Metadata>({
   kind: "code",
   description:
-    "Useful for code generation; Code execution is only available for python code.",
+    "Do generowania kodu. Uruchamianie kodu jest dostępne wyłącznie dla Pythona.",
   initialize: ({ setMetadata }) => {
     setMetadata({
       outputs: [],
@@ -114,8 +110,8 @@ export const codeArtifact = new Artifact<"code", Metadata>({
   actions: [
     {
       icon: <PlayIcon size={18} />,
-      label: "Run",
-      description: "Execute code",
+      label: "Uruchom",
+      description: "Wykonaj kod",
       onClick: async ({ content, setMetadata }) => {
         const runId = generateUUID();
         const outputContent: ConsoleOutputContent[] = [];
@@ -210,7 +206,7 @@ export const codeArtifact = new Artifact<"code", Metadata>({
     },
     {
       icon: <UndoIcon size={18} />,
-      description: "View Previous version",
+      description: "Poprzednia wersja",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("prev");
       },
@@ -224,7 +220,7 @@ export const codeArtifact = new Artifact<"code", Metadata>({
     },
     {
       icon: <RedoIcon size={18} />,
-      description: "View Next version",
+      description: "Następna wersja",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("next");
       },
@@ -238,24 +234,24 @@ export const codeArtifact = new Artifact<"code", Metadata>({
     },
     {
       icon: <CopyIcon size={18} />,
-      description: "Copy code to clipboard",
+      description: "Kopiuj kod do schowka",
       onClick: ({ content }) => {
         navigator.clipboard.writeText(content);
-        toast.success("Copied to clipboard!");
+        toast.success("Skopiowano kod do schowka.");
       },
     },
   ],
   toolbar: [
     {
       icon: <MessageIcon />,
-      description: "Add comments",
+      description: "Dodaj komentarze",
       onClick: ({ sendMessage }) => {
         sendMessage({
           role: "user",
           parts: [
             {
               type: "text",
-              text: "Add comments to the code snippet for understanding",
+              text: "Dodaj do tego fragmentu kodu krótkie, użyteczne komentarze wyjaśniające jego działanie.",
             },
           ],
         });
@@ -263,14 +259,14 @@ export const codeArtifact = new Artifact<"code", Metadata>({
     },
     {
       icon: <LogsIcon />,
-      description: "Add logs",
+      description: "Dodaj logowanie",
       onClick: ({ sendMessage }) => {
         sendMessage({
           role: "user",
           parts: [
             {
               type: "text",
-              text: "Add logs to the code snippet for debugging",
+              text: "Dodaj do tego kodu sensowne logowanie ułatwiające diagnostykę i debugowanie.",
             },
           ],
         });
