@@ -48,7 +48,7 @@ import { Button } from "./ui/button";
 import type { VisibilityType } from "./visibility-selector";
 
 function setCookie(name: string, value: string) {
-  const maxAge = 60 * 60 * 24 * 365; // 1 year
+  const maxAge = 60 * 60 * 24 * 365;
   // biome-ignore lint/suspicious/noDocumentCookie: needed for client-side cookie setting
   document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}`;
 }
@@ -124,12 +124,10 @@ function PureMultimodalInput({
   useEffect(() => {
     if (textareaRef.current) {
       const domValue = textareaRef.current.value;
-      // Prefer DOM value over localStorage to handle hydration
       const finalValue = domValue || localStorageInput || "";
       setInput(finalValue);
       adjustHeight();
     }
-    // Only run once after hydration
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adjustHeight, localStorageInput, setInput]);
 
@@ -206,7 +204,7 @@ function PureMultimodalInput({
       const { error } = await response.json();
       toast.error(error);
     } catch (_error) {
-      toast.error("Failed to upload file, please try again!");
+      toast.error("Nie udało się przesłać pliku. Spróbuj ponownie.");
     }
   }, []);
 
@@ -228,7 +226,8 @@ function PureMultimodalInput({
           ...successfullyUploadedAttachments,
         ]);
       } catch (error) {
-        console.error("Error uploading files!", error);
+        console.error("Błąd przesyłania plików:", error);
+        toast.error("Nie udało się przesłać wybranych plików.");
       } finally {
         setUploadQueue([]);
       }
@@ -251,10 +250,9 @@ function PureMultimodalInput({
         return;
       }
 
-      // Prevent default paste behavior for images
       event.preventDefault();
 
-      setUploadQueue((prev) => [...prev, "Pasted image"]);
+      setUploadQueue((prev) => [...prev, "Wklejony obraz"]);
 
       try {
         const uploadPromises = imageItems
@@ -275,8 +273,8 @@ function PureMultimodalInput({
           ...(successfullyUploadedAttachments as Attachment[]),
         ]);
       } catch (error) {
-        console.error("Error uploading pasted images:", error);
-        toast.error("Failed to upload pasted image(s)");
+        console.error("Błąd przesyłania wklejonych obrazów:", error);
+        toast.error("Nie udało się przesłać wklejonego obrazu.");
       } finally {
         setUploadQueue([]);
       }
@@ -284,7 +282,6 @@ function PureMultimodalInput({
     [setAttachments, uploadFile]
   );
 
-  // Add paste event listener to textarea
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) {
@@ -308,6 +305,7 @@ function PureMultimodalInput({
         )}
 
       <input
+        aria-label="Wybierz pliki do załączenia"
         className="pointer-events-none fixed -top-4 -left-4 size-0.5 opacity-0"
         multiple
         onChange={handleFileChange}
@@ -317,14 +315,14 @@ function PureMultimodalInput({
       />
 
       <PromptInput
-        className="rounded-xl border border-border bg-background p-3 shadow-xs transition-all duration-200 focus-within:border-border hover:border-muted-foreground/50"
+        className="aurelis-luxury-surface rounded-2xl border border-border/80 bg-card/80 p-3 transition-all duration-300 focus-within:border-[#D4AF37]/60 focus-within:ring-1 focus-within:ring-[#D4AF37]/15 hover:border-muted-foreground/40"
         onSubmit={(event) => {
           event.preventDefault();
           if (!input.trim() && attachments.length === 0) {
             return;
           }
           if (status !== "ready") {
-            toast.error("Please wait for the model to finish its response!");
+            toast.error("Poczekaj, aż AURELIS zakończy bieżącą odpowiedź.");
           } else {
             submitForm();
           }
@@ -332,7 +330,7 @@ function PureMultimodalInput({
       >
         {(attachments.length > 0 || uploadQueue.length > 0) && (
           <div
-            className="flex flex-row items-end gap-2 overflow-x-scroll"
+            className="flex flex-row items-end gap-2 overflow-x-auto pb-2"
             data-testid="attachments-preview"
           >
             {attachments.map((attachment) => (
@@ -365,13 +363,14 @@ function PureMultimodalInput({
         )}
         <div className="flex flex-row items-start gap-1 sm:gap-2">
           <PromptInputTextarea
+            aria-label="Wiadomość do AURELIS"
             className="grow resize-none border-0! border-none! bg-transparent p-2 text-base outline-none ring-0 [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-scrollbar]:hidden"
             data-testid="multimodal-input"
             disableAutoResize={true}
             maxHeight={200}
             minHeight={44}
             onChange={handleInput}
-            placeholder="Send a message..."
+            placeholder="Czego dziś potrzebujesz?"
             ref={textareaRef}
             rows={1}
             value={input}
@@ -394,7 +393,8 @@ function PureMultimodalInput({
             <StopButton setMessages={setMessages} stop={stop} />
           ) : (
             <PromptInputSubmit
-              className="size-8 rounded-full bg-primary text-primary-foreground transition-colors duration-200 hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
+              aria-label="Wyślij wiadomość"
+              className="size-8 rounded-full bg-primary text-primary-foreground transition-all duration-200 hover:bg-primary/90 hover:shadow-[0_0_0_1px_rgba(212,175,55,0.35),0_8px_24px_rgba(212,175,55,0.12)] disabled:bg-muted disabled:text-muted-foreground"
               data-testid="send-button"
               disabled={!input.trim() || uploadQueue.length > 0}
               status={status}
@@ -445,7 +445,8 @@ function PureAttachmentsButton({
 
   return (
     <Button
-      className="aspect-square h-8 rounded-lg p-1 transition-colors hover:bg-accent"
+      aria-label={isReasoningModel ? "Załączniki niedostępne dla tego modelu" : "Dodaj załącznik"}
+      className="aspect-square h-8 rounded-lg p-1 transition-colors hover:bg-accent hover:text-[#D4AF37]"
       data-testid="attachments-button"
       disabled={status !== "ready" || isReasoningModel}
       onClick={(event) => {
@@ -476,25 +477,28 @@ function PureModelSelectorCompact({
     chatModels[0];
   const [provider] = selectedModel.id.split("/");
 
-  // Provider display names
   const providerNames: Record<string, string> = {
     anthropic: "Anthropic",
     openai: "OpenAI",
     google: "Google",
     xai: "xAI",
-    reasoning: "Reasoning",
+    reasoning: "Rozumowanie",
   };
 
   return (
     <ModelSelector onOpenChange={setOpen} open={open}>
       <ModelSelectorTrigger asChild>
-        <Button className="h-8 w-[200px] justify-between px-2" variant="ghost">
+        <Button
+          aria-label={`Wybrany model: ${selectedModel.name}`}
+          className="h-8 max-w-[200px] justify-between px-2 text-xs sm:text-sm"
+          variant="ghost"
+        >
           {provider && <ModelSelectorLogo provider={provider} />}
           <ModelSelectorName>{selectedModel.name}</ModelSelectorName>
         </Button>
       </ModelSelectorTrigger>
       <ModelSelectorContent>
-        <ModelSelectorInput placeholder="Search models..." />
+        <ModelSelectorInput placeholder="Szukaj modeli…" />
         <ModelSelectorList>
           {Object.entries(modelsByProvider).map(
             ([providerKey, providerModels]) => (
@@ -517,7 +521,7 @@ function PureModelSelectorCompact({
                       <ModelSelectorLogo provider={logoProvider} />
                       <ModelSelectorName>{model.name}</ModelSelectorName>
                       {model.id === selectedModel.id && (
-                        <CheckIcon className="ml-auto size-4" />
+                        <CheckIcon className="ml-auto size-4 text-[#D4AF37]" />
                       )}
                     </ModelSelectorItem>
                   );
@@ -542,6 +546,7 @@ function PureStopButton({
 }) {
   return (
     <Button
+      aria-label="Zatrzymaj generowanie"
       className="size-7 rounded-full bg-foreground p-1 text-background transition-colors duration-200 hover:bg-foreground/90 disabled:bg-muted disabled:text-muted-foreground"
       data-testid="stop-button"
       onClick={(event) => {
