@@ -20,7 +20,7 @@ type TextArtifactMetadata = {
 
 export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
   kind: "text",
-  description: "Useful for text content, like drafting essays and emails.",
+  description: "Do tworzenia i redagowania treści, takich jak eseje, dokumenty i wiadomości.",
   initialize: async ({ documentId, setMetadata }) => {
     const suggestions = await getSuggestions({ documentId });
 
@@ -95,7 +95,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
   actions: [
     {
       icon: <ClockRewind size={18} />,
-      description: "View changes",
+      description: "Pokaż zmiany",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("toggle");
       },
@@ -109,7 +109,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     },
     {
       icon: <UndoIcon size={18} />,
-      description: "View Previous version",
+      description: "Poprzednia wersja",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("prev");
       },
@@ -123,7 +123,7 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     },
     {
       icon: <RedoIcon size={18} />,
-      description: "View Next version",
+      description: "Następna wersja",
       onClick: ({ handleVersionChange }) => {
         handleVersionChange("next");
       },
@@ -137,24 +137,24 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     },
     {
       icon: <CopyIcon size={18} />,
-      description: "Copy to clipboard",
+      description: "Kopiuj do schowka",
       onClick: ({ content }) => {
         navigator.clipboard.writeText(content);
-        toast.success("Copied to clipboard!");
+        toast.success("Skopiowano do schowka.");
       },
     },
   ],
   toolbar: [
     {
       icon: <PenIcon />,
-      description: "Add final polish",
+      description: "Dopracuj tekst",
       onClick: ({ sendMessage }) => {
         sendMessage({
           role: "user",
           parts: [
             {
               type: "text",
-              text: "Please add final polish and check for grammar, add section titles for better structure, and ensure everything reads smoothly.",
+              text: "Dopracuj tekst, popraw gramatykę i styl, dodaj czytelne śródtytuły oraz zadbaj o płynność i spójność całości.",
             },
           ],
         });
@@ -162,14 +162,14 @@ export const textArtifact = new Artifact<"text", TextArtifactMetadata>({
     },
     {
       icon: <MessageIcon />,
-      description: "Request suggestions",
+      description: "Poproś o sugestie",
       onClick: ({ sendMessage }) => {
         sendMessage({
           role: "user",
           parts: [
             {
               type: "text",
-              text: "Please add suggestions you have that could improve the writing.",
+              text: "Przedstaw konkretne sugestie, które mogą podnieść jakość tego tekstu, wraz z krótkim uzasadnieniem najważniejszych zmian.",
             },
           ],
         });
